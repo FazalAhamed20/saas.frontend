@@ -52,6 +52,7 @@ const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
               value={newItem.quantity}
               onChange={(e) => setNewItem({ ...newItem, quantity: Number(e.target.value) })}
               className='mt-1 block w-full border-gray-300 rounded-md'
+              min={1}
               required
             />
           </div>

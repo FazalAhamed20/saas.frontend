@@ -29,7 +29,7 @@ const InventoryTable: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const isAdmin = useSelector((state: any) => state?.auth?.user?.user.isAdmin);
+    const isAdmin = useSelector((state: any) => state?.auth?.user?.user?.isAdmin);
 
     console.log(isAdmin);
     
@@ -139,7 +139,9 @@ const InventoryTable: React.FC = () => {
     };
 
     const handleLogout = async () => {
-        await dispatch(logout());
+        const response=await dispatch(logout());
+        console.log("logout",response);
+        
         navigate('/login', { replace: false });
     }
 
