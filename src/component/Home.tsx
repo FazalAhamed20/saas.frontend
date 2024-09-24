@@ -29,7 +29,7 @@ const InventoryTable: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const isAdmin = useSelector((state: any) => state.auth?.user.user.isAdmin);
+    const isAdmin = useSelector((state: any) => state?.auth?.user?.user.isAdmin);
 
     console.log(isAdmin);
     
