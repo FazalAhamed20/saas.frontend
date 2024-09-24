@@ -12,7 +12,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await axios.get('https://saasbackend-production.up.railway.app/authenticate', { withCredentials: true });
+        const response = await axios.get('https://saasbackend-production.up.railway.app/api/authenticate', { withCredentials: true });
         console.log(response.data);
         
         setIsAuthenticated(response.data.isAuthenticated);
