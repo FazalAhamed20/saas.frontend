@@ -23,6 +23,7 @@ const BillManagement: React.FC<{ onBillFinalized: () => void }> = ({ onBillFinal
   const [items, setItems] = useState<Item[]>([]);
   const [billItems, setBillItems] = useState<BillItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const userId = useSelector((state: any) => state?.auth?.user?.user?.UserId);
 
@@ -95,22 +96,28 @@ const BillManagement: React.FC<{ onBillFinalized: () => void }> = ({ onBillFinal
   };
 
   const finalizeBill = async () => {
-    for (const billItem of billItems) {
-      const updatedItem: Item = {
-        ...billItem,
-        quantity: billItem.quantity - billItem.billQuantity
-      };
-      const response = await dispatch(updateItem(updatedItem));
-      onBillFinalized()
-      if (!response.payload?.success) {
-        toast.error(`Failed to update quantity for ${billItem.name}`);
-        return;
+    setIsLoading(true);
+    try {
+      for (const billItem of billItems) {
+        const updatedItem: Item = {
+          ...billItem,
+          quantity: billItem.quantity - billItem.billQuantity
+        };
+        const response = await dispatch(updateItem(updatedItem));
+        if (!response.payload?.success) {
+          throw new Error(`Failed to update quantity for ${billItem.name}`);
+        }
       }
+      generateInvoice();
+      setBillItems([]);
+      await fetchAllProduct();
+      toast.success('Bill finalized and inventory updated');
+      onBillFinalized();
+    } catch (error:any) {
+      toast.error(error.message || 'An error occurred while finalizing the bill');
+    } finally {
+      setIsLoading(false);
     }
-    generateInvoice();
-    setBillItems([]);
-    fetchAllProduct();
-    toast.success('Bill finalized and inventory updated');
   };
 
   return (
@@ -200,12 +207,12 @@ const BillManagement: React.FC<{ onBillFinalized: () => void }> = ({ onBillFinal
         <div className="mt-4">
           <p className="text-xl font-bold">Total: ₹{calculateTotal()}</p>
           <button
-            onClick={finalizeBill}
-            className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
-            disabled={billItems.length === 0}
-          >
-            Finalize Bill
-          </button>
+          onClick={finalizeBill}
+          className="mt-2 px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
+          disabled={billItems.length === 0 || isLoading}
+        >
+          {isLoading ? 'Finalizing...' : 'Finalize Bill'}
+        </button>
         </div>
       </div>
     </div>
