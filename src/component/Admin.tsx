@@ -131,6 +131,9 @@ const AdminTable: React.FC = () => {
     if (response.payload?.success) {
        
         toast.success(response.payload?.message);
+        setProducts([response.payload.data, ...products])
+        setFilteredItems([response.payload.data, ...products]);
+    
         fetchAllProduct();
     }else{
         toast.error(response.payload?.message);
@@ -235,9 +238,9 @@ const AdminTable: React.FC = () => {
                 <button
       onClick={() => handleDeleteProduct(item._id || '')}
       className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-      disabled={deletingProductId === item._id} // Disable only for the deleting item
+      disabled={deletingProductId === item._id} 
     >
-      {deletingProductId === item._id ? ( // Show 'Deleting...' only for the item being deleted
+      {deletingProductId === item._id ? ( 
         <div className="flex items-center">
           <svg
             className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
