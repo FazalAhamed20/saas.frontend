@@ -131,9 +131,7 @@ const AdminTable: React.FC = () => {
     if (response.payload?.success) {
        
         toast.success(response.payload?.message);
-        setProducts([response.payload.data, ...products])
-        setFilteredItems([response.payload.data, ...products]);
-    
+        
         fetchAllProduct();
     }else{
         toast.error(response.payload?.message);
