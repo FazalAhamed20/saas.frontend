@@ -9,13 +9,13 @@ import {
 
 
   interface InventorySatate {
-    user: any; 
+    data: any; 
     loading: boolean;
     error: string | null;
     message:string | null
   }
   const initialState: InventorySatate = {
-    user: null,
+    data: null,
     loading: false,
     error: null,
     message:null
@@ -37,7 +37,7 @@ import {
           })
           .addCase(addItem.fulfilled, (state,action: PayloadAction<any>) => {
             state.loading = false;
-            state.user = null
+            state.data = null
             console.log(action.payload?.message);
             
           
@@ -58,7 +58,7 @@ import {
           })
           .addCase(updateItem.fulfilled, (state,action: PayloadAction<any>) => {
             state.loading = false;
-            state.user = null
+            state.data = null
             console.log(action.payload?.message);
             
           
@@ -73,6 +73,7 @@ import {
             
             
           })
+          
     },
 });
 export const inventoryReducer = inventorySlice.reducer;

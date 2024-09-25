@@ -5,6 +5,7 @@ import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
 
+
 const SignupPage = lazy(() => import('../pages/SignupPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage'));
 
@@ -15,6 +16,7 @@ const RouteConfig = () => {
      <Route path="/login" element={<PublicRoute element={<LoginPage />} />} />
       
       <Route path="/home" element={<PrivateRoute element={<HomePage />} />} />
+     
     
     </Routes>
   );

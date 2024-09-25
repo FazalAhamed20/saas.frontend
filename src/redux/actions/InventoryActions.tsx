@@ -10,6 +10,12 @@ import baseAxios from '../../config/AxiosInstance';
     description: string;
     quantity?: Number;
   };
+  export type AddProduct = {
+    id?: string;
+    name: string;
+    category: string;
+    image: string;
+  };
 
 
 
@@ -26,13 +32,15 @@ import baseAxios from '../../config/AxiosInstance';
       }
     }
   );
-  export const fetchAllProducts = createAsyncThunk(
+  export const fetchAllItem = createAsyncThunk(
     'inventory/fetchAllProducts',
-    async (__, { rejectWithValue }) => {
+    async (data:any, { rejectWithValue }) => {
       try {
+        console.log(data);
+        
        
         
-        const response = await baseAxios.get('/fetchAll-products');
+        const response = await baseAxios.post('/fetchAll-items',data);
         return response.data; 
       } catch (error: any) {
         return rejectWithValue(error.response.data); 
@@ -63,6 +71,53 @@ import baseAxios from '../../config/AxiosInstance';
        
         
         const response = await baseAxios.post('/delete-item',data);
+        return response.data; 
+      } catch (error: any) {
+        return rejectWithValue(error.response.data); 
+      }
+    }
+  );
+
+  export const addProduct = createAsyncThunk(
+    'inventory/add-product',
+    async (data:any, { rejectWithValue }) => {
+      try {
+        console.log(data);
+        
+       
+        
+        const response = await baseAxios.post('/add-product',data);
+        return response.data; 
+      } catch (error: any) {
+        return rejectWithValue(error.response.data); 
+      }
+    }
+  );
+
+
+  export const fetchAllProducts = createAsyncThunk(
+    'inventory/fetchAllProducts',
+    async (__, { rejectWithValue }) => {
+      try {
+       
+        
+        const response = await baseAxios.get('/fetchAll-products');
+        return response.data; 
+      } catch (error: any) {
+        return rejectWithValue(error.response.data); 
+      }
+    }
+  );
+
+  
+
+  export const fetchItem = createAsyncThunk(
+    'inventory/fetchItem',
+    async (__, { rejectWithValue }) => {
+      try {
+       
+        
+        const response = await baseAxios.get('/fetchAll-categories');
         return response.data; 
       } catch (error: any) {
         return rejectWithValue(error.response.data); 

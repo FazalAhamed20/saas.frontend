@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 interface Item {
-  id: string;
-  name: string;
-  quantity: number;
-  description: string;
+  id?: string;
+  _id?: string | null
+  name?: string;
+  quantity?: number;
+  description?: string;
+  price?: number;
+  category?: string;
 }
 
 interface EditItemModalProps {
@@ -17,9 +20,9 @@ interface EditItemModalProps {
 const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, onEditItem, item }) => {
   const [editedItem, setEditedItem] = useState<Item>({
     id: '',
-    name: '',
     quantity: 0,
     description: '',
+    price: 0
   });
 
   useEffect(() => {
@@ -32,7 +35,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, onEditIt
     const { name, value } = e.target;
     setEditedItem(prev => ({
       ...prev,
-      [name]: name === 'quantity' ? parseInt(value) || 0 : value,
+      [name]: name === 'quantity' || name === 'price' ? parseFloat(value) || 0 : value,
     }));
   };
 
@@ -49,20 +52,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, onEditIt
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <h3 className="text-lg font-bold mb-4">Edit Item</h3>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={editedItem.name}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
+         
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="quantity">
               Quantity
@@ -73,6 +63,22 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, onEditIt
               name="quantity"
               value={editedItem.quantity}
               onChange={handleChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
+              Price
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={editedItem.price}
+              onChange={handleChange}
+              step="0.01"
+              min="0"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
