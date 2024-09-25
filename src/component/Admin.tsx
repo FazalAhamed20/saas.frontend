@@ -38,11 +38,8 @@ const AdminTable: React.FC = () => {
   const fetchAllProduct = useCallback(async () => {
     const response = await dispatch(fetchAllProducts());
     if (response.payload?.success) {
-      const sortedData = response.payload.data?.data.sort((a:any, b:any) => {
-        return new Date(b.createdAt || b.updatedAt).getTime() - new Date(a.createdAt || a.updatedAt).getTime();
-      });
-      setProducts(sortedData);
-      setFilteredItems(sortedData);
+      setProducts(response.payload.data?.data);
+      setFilteredItems(response.payload.data?.data);
     }
   }, [dispatch]);
 
