@@ -46,7 +46,9 @@ import {
           })
           .addCase(addItem.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
-            state.error = action.payload?.message;
+            state.error = action.payload;
+            console.log(state.error);
+            
             toast.error(state.error)
             console.log(state.error);
             

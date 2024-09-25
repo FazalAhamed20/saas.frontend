@@ -12,16 +12,17 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onAddItem: (product: Product) => void;
-  isLoading: boolean;
+ 
 }
 
-const AddProductModal: React.FC<Props> = ({ isOpen, onClose, onAddItem,isLoading }) => {
+const AddProductModal: React.FC<Props> = ({ isOpen, onClose, onAddItem}) => {
   const [newItem, setNewItem] = useState<Product>({
     id: '',
     name: '',
     category: '',
-    image: null, // Store image as a File
+    image: null,
   });
+  const [isLoading,setIsLoading]=useState(false)
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -37,11 +38,13 @@ const AddProductModal: React.FC<Props> = ({ isOpen, onClose, onAddItem,isLoading
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit =async (e: React.FormEvent) => {
     e.preventDefault();
-    onAddItem({ ...newItem, id: Date.now().toString() });
+    setIsLoading(true)
+    await onAddItem({ ...newItem, id: Date.now().toString() });
     resetForm();
     onClose();
+    setIsLoading(false)
   };
 
   const resetForm = () => {

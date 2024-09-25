@@ -33,6 +33,7 @@ const InventoryTable: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showBillManagement, setShowBillManagement] = useState(false);
     const [isLogout,setIsLogout]=useState(false)
+    const [Loading,setLoading]=useState< string | null | undefined>(null)
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const isAdmin = useSelector((state: any) => state?.auth?.user?.user?.isAdmin);
@@ -104,6 +105,9 @@ const InventoryTable: React.FC = () => {
         if (response.payload?.success) {
             toast.success(response.payload?.message);
             fetchAllProduct();
+        }else{
+            toast.error(response.payload?.message);
+            
         }
     };
 
@@ -123,6 +127,7 @@ const InventoryTable: React.FC = () => {
     };
 
     const handleDeleteItem = async (itemId: string | null | undefined) => {
+        setLoading(itemId)
         const data = {
             _id: itemId
         }
@@ -133,6 +138,7 @@ const InventoryTable: React.FC = () => {
         } else {
             toast.error('Failed to delete item');
         }
+        setLoading(null)
     };
 
     const generatePDF = () => {
@@ -272,8 +278,10 @@ const InventoryTable: React.FC = () => {
                               <button onClick={() => handleEditClick(item)} className='px-2 py-1 text-xs bg-blue-500 text-white rounded mr-1' aria-label={`Edit ${item.name}`}>
                                 Edit
                               </button>
-                              <button onClick={() => handleDeleteItem(item._id)} className='px-2 py-1 text-xs bg-red-500 text-white rounded' aria-label={`Delete ${item.name}`}>
-                                Delete
+                              <button onClick={() => handleDeleteItem(item._id)} className='px-2 py-1 text-xs bg-red-500 text-white rounded' aria-label={`Delete ${item.name}`} disabled={Loading===item._id}>
+                                {
+                                    Loading===item._id ? 'Deleting...' : 'Delete'
+                                }
                               </button>
                             </td>
                           </tr>

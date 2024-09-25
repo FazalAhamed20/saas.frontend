@@ -28,6 +28,8 @@ import baseAxios from '../../config/AxiosInstance';
         const response = await baseAxios.post('/add-item', data,);
         return response.data; 
       } catch (error: any) {
+        console.log(error);
+        
         return rejectWithValue(error.response.data); 
       }
     }
@@ -124,3 +126,15 @@ import baseAxios from '../../config/AxiosInstance';
       }
     }
   );
+
+  export const deleteProduct = createAsyncThunk(
+    "inventory/deleteProduct",
+    async (productId: string, { rejectWithValue }) => {
+        try {
+            const response = await baseAxios.delete(`/delete-products/${productId}`);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);

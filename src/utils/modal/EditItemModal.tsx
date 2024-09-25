@@ -24,6 +24,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, onEditIt
     description: '',
     price: 0
   });
+  const[isLoading,setIsLoading]=useState(false)
 
   useEffect(() => {
     if (item) {
@@ -39,10 +40,12 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, onEditIt
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    onEditItem(editedItem);
+    setIsLoading(true)
+    await onEditItem(editedItem);
     onClose();
+    setIsLoading(false)
   };
 
   if (!isOpen) return null;
@@ -100,8 +103,12 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, onEditIt
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              disabled={isLoading}
             >
-              Save Changes
+              {
+                isLoading ? 'Saving...' : 'Save Changes'
+              }
+              
             </button>
             <button
               type="button"

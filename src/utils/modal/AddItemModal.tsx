@@ -36,6 +36,7 @@ const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
   });
   const [availableItems, setAvailableItems] = useState<AvailableItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<string>('');
+  const [isLoading,setIsLoading]=useState(false)
   
   const dispatch: AppDispatch = useDispatch();
   const userId =  useSelector((state: any) => state.auth.user?.user?.UserId);
@@ -69,11 +70,13 @@ const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    onAddItem({ ...newItem, id: Date.now().toString(),userId:userId });
+    setIsLoading(true)
+    await onAddItem({ ...newItem, id: Date.now().toString(),userId:userId });
     resetForm();
     onClose();
+    setIsLoading(false)
   };
 
   const resetForm = () => {
@@ -152,8 +155,11 @@ const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
             <button type='button' onClick={resetForm} className='px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2'>
               Cancel
             </button>
-            <button type='submit' className='px-4 py-2 bg-blue-500 text-white rounded'>
-              Add Item
+            <button type='submit' className='px-4 py-2 bg-blue-500 text-white rounded' disabled={isLoading}>
+              {
+                isLoading ? 'Adding...' :'Add Item'
+              }
+             
             </button>
           </div>
         </form>

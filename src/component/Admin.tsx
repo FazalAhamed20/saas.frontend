@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/Store";
 import {
     addProduct,
+  deleteProduct,
   fetchAllProducts,
  
 } from "../redux/actions/InventoryActions";
@@ -27,6 +28,7 @@ const AdminTable: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
   const [isLoading,setIsLoading]=useState(false)
 
   const dispatch: AppDispatch = useDispatch();
@@ -105,11 +107,13 @@ const AdminTable: React.FC = () => {
 
 
   const handleLogout = async () => {
+    setIsLoading(true)
     await dispatch(logout());
     navigate("/login", { replace: false });
+    setIsLoading(false)
   };
   const handleAddItem=async(product: Product)=>{
-    setIsLoading(true)
+  
     let cloudinaryUrl = product.image;
    
 
@@ -128,10 +132,31 @@ const AdminTable: React.FC = () => {
        
         toast.success(response.payload?.message);
         fetchAllProduct();
+    }else{
+        toast.error(response.payload?.message);
     }
-    setIsLoading(false)
+  
 
   }
+  const handleDeleteProduct = async (productId: string) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+        setDeletingProductId(productId);
+      try {
+        const response = await dispatch(deleteProduct(productId));
+        if (response.payload?.success) {
+          toast.success(response.payload.message);
+          fetchAllProduct();
+        } else {
+          toast.error(response.payload?.message || "Failed to delete product");
+        }
+      } catch (error) {
+        console.error("Error deleting product:", error);
+        toast.error("Failed to delete product");
+      } finally {
+        setDeletingProductId(null); 
+      }
+    }
+  };
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4 md:p-6">
@@ -158,8 +183,12 @@ const AdminTable: React.FC = () => {
         <button
           onClick={handleLogout}
           className="px-4 py-2 bg-red-500 text-white rounded w-full md:w-auto"
+          disabled={isLoading}
         >
-          Logout
+            {
+                isLoading?'Logging out...' : 'Logout'
+            }
+        
         </button>
       </div>
 
@@ -176,6 +205,9 @@ const AdminTable: React.FC = () => {
               <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
                 Category
               </th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -198,6 +230,35 @@ const AdminTable: React.FC = () => {
                 <td className="px-4 py-2 whitespace-nowrap hidden md:table-cell">
                   <div className="text-sm text-gray-900">{item.category}</div>
                 </td>
+                <td className="px-4 py-2 whitespace-nowrap">
+                    
+                <button
+      onClick={() => handleDeleteProduct(item._id || '')}
+      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+      disabled={deletingProductId === item._id} // Disable only for the deleting item
+    >
+      {deletingProductId === item._id ? ( // Show 'Deleting...' only for the item being deleted
+        <div className="flex items-center">
+          <svg
+            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Deleting...
+        </div>
+      ) : (
+        'Delete'
+      )}
+    </button>
+                                </td>
               </tr>
             ))}
           </tbody>
@@ -224,7 +285,7 @@ const AdminTable: React.FC = () => {
           Next
         </button>
       </div>
-      <AddProductModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleAddItem} isLoading={isLoading}/>
+      <AddProductModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleAddItem} />
     </div>
   );
 };
