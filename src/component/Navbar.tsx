@@ -46,7 +46,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout() as any);
-    navigate("/login", { replace: false });
+    navigate("/", { replace: false });
     setShowDropdown(false);
   };
 

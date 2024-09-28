@@ -175,7 +175,7 @@ const InventoryTable: React.FC = () => {
     const response = await dispatch(logout());
     console.log("logout", response);
 
-    navigate("/login", { replace: false });
+    navigate("/", { replace: false });
     setIsLogout(false);
   };
   const handleBillFinalized = () => {
