@@ -138,3 +138,31 @@ import baseAxios from '../../config/AxiosInstance';
         }
     }
 );
+
+export const orders = createAsyncThunk(
+  'inventory/orders',
+  async (data:AddItem, { rejectWithValue }) => {
+    try {
+     
+      
+      const response = await baseAxios.post('/orders',data);
+      return response.data; 
+    } catch (error: any) {
+      return rejectWithValue(error.response.data); 
+    }
+  }
+);
+
+export const fetchOrders = createAsyncThunk(
+  'inventory/fetchOrders',
+  async (userId:string, { rejectWithValue }) => {
+    try {
+     
+      
+      const response = await baseAxios.post('/fetch-orders',{userId:userId});
+      return response.data; 
+    } catch (error: any) {
+      return rejectWithValue(error.response.data); 
+    }
+  }
+);

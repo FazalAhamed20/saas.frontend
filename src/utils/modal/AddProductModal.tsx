@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Product {
   id: string;
@@ -24,6 +25,7 @@ const validationSchema = Yup.object().shape({
 
 const AddProductModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { darkMode } = useTheme();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, setFieldValue: (field: string, value: any) => void) => {
     const file = e.target.files?.[0];
@@ -41,8 +43,8 @@ const AddProductModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 shadow-md">
-        <h3 className="text-lg font-bold mb-4">Add New Item</h3>
+      <div className={`bg-white ${darkMode ? 'dark:bg-gray-800 dark:text-gray-300' : ''} rounded-lg p-6 shadow-md`}>
+        <h3 className={`text-lg font-bold mb-4 ${darkMode ? 'dark:text-white' : ''}`}>Add New Item</h3>
         <Formik
           initialValues={{ id: '', name: '', category: '', image: null }}
           validationSchema={validationSchema}
@@ -57,32 +59,32 @@ const AddProductModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
           {({ isSubmitting, setFieldValue }) => (
             <Form>
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Item Name</label>
+                <label htmlFor="name" className={`block text-sm font-medium ${darkMode ? 'dark:text-gray-300' : 'text-gray-700'}`}>Item Name</label>
                 <Field
                   type="text"
                   name="name"
-                  className="mt-1 block w-full border-gray-300 rounded-md"
+                  className={`mt-1 block w-full border-gray-300 rounded-md ${darkMode ? 'dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300' : ''}`}
                 />
                 <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                <label htmlFor="category" className={`block text-sm font-medium ${darkMode ? 'dark:text-gray-300' : 'text-gray-700'}`}>Category</label>
                 <Field
                   type="text"
                   name="category"
-                  className="mt-1 block w-full border-gray-300 rounded-md"
+                  className={`mt-1 block w-full border-gray-300 rounded-md ${darkMode ? 'dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300' : ''}`}
                 />
                 <ErrorMessage name="category" component="div" className="text-red-500 text-sm" />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="image" className="block text-sm font-medium text-gray-700">Upload Image</label>
+                <label htmlFor="image" className={`block text-sm font-medium ${darkMode ? 'dark:text-gray-300' : 'text-gray-700'}`}>Upload Image</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleImageChange(e, setFieldValue)}
-                  className="mt-1 block w-full border-gray-300 rounded-md"
+                  className={`mt-1 block w-full border-gray-300 rounded-md ${darkMode ? 'dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300' : ''}`}
                 />
                 <ErrorMessage name="image" component="div" className="text-red-500 text-sm" />
               </div>
@@ -94,12 +96,12 @@ const AddProductModal: React.FC<Props> = ({ isOpen, onClose, onAddItem }) => {
               )}
 
               <div className="flex justify-end">
-                <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2">
+                <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2 dark:bg-gray-600 dark:text-white">
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  className={`px-4 py-2 ${isSubmitting ? 'bg-blue-300' : 'bg-blue-500'} text-white rounded`}
+                  className={`px-4 py-2 ${isSubmitting ? 'bg-blue-300' : 'bg-blue-500'} text-white rounded ${isSubmitting ? 'dark:bg-blue-300' : 'dark:bg-blue-600'}`}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

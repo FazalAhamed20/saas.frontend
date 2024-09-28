@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import { KeyRound } from 'lucide-react';
 import { AppDispatch } from '../redux/Store';
 import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
 import { Verify } from '../redux/actions/AuthActions';
 import { useNavigate } from 'react-router-dom';
 

@@ -8,9 +8,12 @@ import Store, { persistor } from './redux/Store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext.tsx';
+import '@fontsource/roboto'; // Import the font
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <ThemeProvider>
      <Provider store={Store}>
      <PersistGate loading={null} persistor={persistor}>
      <ToastContainer />
@@ -20,6 +23,7 @@ createRoot(document.getElementById('root')!).render(
      </PersistGate>
 
      </Provider>
+     </ThemeProvider>
    
   </StrictMode>,
 )

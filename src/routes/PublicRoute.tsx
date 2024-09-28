@@ -30,7 +30,7 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ element }) => {
   }
 
   if (isAuthenticated) {
-    return <Navigate to='/home' />;
+    return <Navigate to='/dashboard' />;
   }
 
   return element;
